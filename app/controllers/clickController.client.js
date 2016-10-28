@@ -2,55 +2,40 @@
 
 (function () {
 
+	// Variables to represent corresponding html elements
    var addButton = document.querySelector('.btn-add');
    var deleteButton = document.querySelector('.btn-delete');
    var clickNbr = document.querySelector('#click-nbr');
-   var apiUrl = 'http://localhost:3000/api/clicks';
+	// AppUrl from .env file + api specific route
+   var apiUrl = appUrl + '/api/:id/clicks';
 
-   function ready (fn) {
-      if (typeof fn !== 'function') {
-         return;
-      }
-
-      if (document.readyState === 'complete') {
-         return fn();
-      }
-
-      document.addEventListener('DOMContentLoaded', fn, false);
-   }
-
-   function ajaxRequest (method, url, callback) {
-      var xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function () {
-         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            callback(xmlhttp.response);
-         }
-      };
-
-      xmlhttp.open(method, url, true);
-      xmlhttp.send();
-   }
-
+	// Function to update click count with info given from ajax function
    function updateClickCount (data) {
-      var clicksObject = JSON.parse(data);
-      clickNbr.innerHTML = clicksObject.clicks;
+      var clicksObject = JSON.parse(data); // Convert recieved ajax data to a json object
+      clickNbr.innerHTML = clicksObject.clicks; // Update click count
    }
 
-   ready(ajaxRequest('GET', apiUrl, updateClickCount));
+	// Immediate function to update click count when page loads
+   ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount));
 
+	// Event listener to perform action when addButton is clicked
    addButton.addEventListener('click', function () {
 
-      ajaxRequest('POST', apiUrl, function () {
-         ajaxRequest('GET', apiUrl, updateClickCount);
+		/* Double ajax functions: When a post request is made,
+			make a get request to reflect the updated change
+			Remember the post request automatically calls the
+			changing function through routing, so the callback just
+			has to update the view */
+      ajaxFunctions.ajaxRequest('POST', apiUrl, function () {
+         ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount);
       });
 
    }, false);
 
    deleteButton.addEventListener('click', function () {
 
-      ajaxRequest('DELETE', apiUrl, function () {
-         ajaxRequest('GET', apiUrl, updateClickCount);
+      ajaxFunctions.ajaxRequest('DELETE', apiUrl, function () {
+         ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount);
       });
 
    }, false);

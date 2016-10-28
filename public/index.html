@@ -5,8 +5,15 @@
    <head>
       <title>Clementine.js - The elegant and lightweight full-stack boilerplate.</title>
       <link href="http://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" type="text/css">
-      <link href="/public/css/main.css" rel="stylesheet" type="text/css">  
+      <link href="/public/css/main.css" rel="stylesheet" type="text/css">
    </head>
+
+	<header>
+   	<p>Welcome, <span id="display-name"></span>!</p>
+   	<a class="menu" href="/profile">Profile</a>
+   	<p>|</p>
+   	<a class="menu" href="/logout">Logout</a>
+	</header>
 
    <body>
       <div class="container">
@@ -16,7 +23,7 @@
       </div>
 
       <div class="container">
-         <p>You have clicked the button <span id="click-nbr"></span> times.</p>   
+         <p>You have clicked the button <span id="click-nbr"></span> times.</p>
          <br />
          <div class="btn-container">
             <button type="submit" class="btn btn-add">CLICK ME!</button>
@@ -24,7 +31,10 @@
          </div>
       </div>
 
-      <script type="text/javascript" src="/controllers/clickController.client.js"></script>   
+		<!-- Make sure the common script comes before the controller script -->
+		<script type="text/javascript" src="common/ajax-functions.js"></script>
+      <script type="text/javascript" src="/controllers/clickController.client.js"></script>
+		<script type="text/javascript" src="controllers/userController.client.js"></script>
    </body>
 
 </html>
